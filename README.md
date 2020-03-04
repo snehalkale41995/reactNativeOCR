@@ -1,0 +1,1 @@
+# reactNativeOCR
