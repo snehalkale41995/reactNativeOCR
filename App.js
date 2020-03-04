@@ -1,7 +1,7 @@
 
 
 import React from 'react';
-import { StyleSheet, Text, View, Button, Image } from 'react-native';
+import { StyleSheet, Text, View, Button, Image , TouchableOpacity} from 'react-native';
 import ImagePicker from 'react-native-image-picker';
 import { RNCamera } from 'react-native-camera';
 
@@ -48,6 +48,7 @@ export default class App extends React.Component {
          source = response.data;
         // You can also display the image using data:
         // let source = { uri: 'data:image/jpeg;base64,' + response.data };
+        console.log("response Upload function------------", JSON.stringify(response))
         this.setState({
           filePath: response,
           confirmation : "Extracting data"
@@ -123,19 +124,48 @@ export default class App extends React.Component {
       }
     }
 
+    takePicture = async() => {
+      if (this.camera) {
+        const options = { quality: 0.5, base64: true };
+        const data = await this.camera.takePictureAsync(options);
+        console.log("response Camera function-----------------", JSON.stringify(data))
+        console.log(data.uri);
+        this.setState({
+          filePath: data.uri,
+          confirmation : "Extracting data"
+        });
+       this.uploadImage(data.base64);
+      }
+    };
+  
+
   render() {
+    console.log("heyyyy");
     let {Amount, Invoice, Provider} = this.state;
     return (
       <View style={styles.container}>
         <View style={styles.container}>
         <Button title="Choose File" onPress={this.chooseFile.bind(this)} />
+        <View style={styles.cameraContainer}>
+      <RNCamera
+        ref={ref => {
+          this.camera = ref;
+        }}
+        style={styles.preview}
+      />
+      <View style={{ flex: 0, flexDirection: 'row', justifyContent: 'center' }}>
+        <TouchableOpacity onPress={this.takePicture.bind(this)} style={styles.capture}>
+          <Text style={{ fontSize: 14 }}> SNAP </Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+        <View>
           <Image
             source={{ uri: this.state.filePath.uri }}
             style={{ width: 250, height: 250 ,  marginTop : 10}}
           />
-          <View>
-          <RNCamera/>
           </View>
+   
           <View style={styles.confirmView}>  
             <Text style={styles.confirmText}>
             {this.state.confirmation}
@@ -148,12 +178,10 @@ export default class App extends React.Component {
             <Text> Invoice : {Invoice} </Text>
             <Text> Provider : {Provider} </Text>
           </View> ) : null }
-          
-         
         </View>
       </View>
-    );
-  }
+    )
+      }
 }
 const styles = StyleSheet.create({
   container: {
@@ -169,5 +197,24 @@ const styles = StyleSheet.create({
   },
   confirmText : {
     alignItems: 'center', color : 'red'
+  },
+  cameraContainer: {
+    flex: 1,
+    flexDirection: 'column',
+    backgroundColor: 'black',
+  },
+  preview: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+  },
+  capture: {
+    flex: 0,
+    backgroundColor: '#fff',
+    borderRadius: 5,
+    padding: 15,
+    paddingHorizontal: 20,
+    alignSelf: 'center',
+    margin: 20,
   }
 });
