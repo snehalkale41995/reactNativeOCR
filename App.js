@@ -1,7 +1,9 @@
+
+
 import React from 'react';
 import { StyleSheet, Text, View, Button, Image } from 'react-native';
 import ImagePicker from 'react-native-image-picker';
-
+import { RNCamera } from 'react-native-camera';
 
 
 export default class App extends React.Component {
@@ -131,6 +133,9 @@ export default class App extends React.Component {
             source={{ uri: this.state.filePath.uri }}
             style={{ width: 250, height: 250 ,  marginTop : 10}}
           />
+          <View>
+          <RNCamera/>
+          </View>
           <View style={styles.confirmView}>  
             <Text style={styles.confirmText}>
             {this.state.confirmation}
