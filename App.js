@@ -73,7 +73,7 @@ export default class App extends React.Component {
 
       this.setState({confirmation : "Processing..."})
       let responseProd = await fetch(
-          'https://8vlgj1j9f0.execute-api.us-west-1.amazonaws.com/Production',
+          '',
           {
           method: "POST",
           headers: {
@@ -95,7 +95,7 @@ export default class App extends React.Component {
   
       let targetImage= UID + ".png";
       const responseOCR =await fetch(
-          'https://8vlgj1j9f0.execute-api.us-west-1.amazonaws.com/Production/ocr',
+          '',
           {
           method: "POST",
           headers: {
